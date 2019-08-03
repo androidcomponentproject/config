@@ -1,0 +1,57 @@
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+Properties config = new Properties()
+config.load(project.file("nexus.properties").newDataInputStream())
+def nexus_versionName = config.getProperty('nexus_version')
+def nexus_artifactId = config.getProperty('nexus_artifactId')
+def nexus_groupId = config.getProperty('nexus_groupId')
+
+afterEvaluate { project ->
+    
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                pom.groupId = nexus_groupId
+                pom.artifactId = nexus_artifactId
+                pom.packaging = 'aar'
+                pom.name = nexus_artifactId
+                if (project.hasProperty("release")) {
+                    pom.version = nexus_version
+
+                    def url = ""
+                    if("library".equalsIgnoreCase(nexus_type)){
+                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobileLib-Release/"
+                    }else if("business".equalsIgnoreCase(nexus_type)){
+                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobile-Release/"
+                    }
+                    repository(url: url) {
+                        authentication(userName: System.getenv("maven_username"), password: System.getenv("maven_password"))
+                    }
+                } else {
+                    def url = ""
+                    if("library".equalsIgnoreCase(nexus_type)){
+                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobileLib-Snapshot/"
+                    }else if("business".equalsIgnoreCase(nexus_type)){
+                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobile-Snapshot/"
+                    }
+                    pom.version = nexus_version + '-SNAPSHOT'
+                    snapshotRepository(url: url) {
+                        authentication(userName: HB_USERNAME_SNAPSHOT, password: HB_PASSWORD_SNAPSHOT)
+                    }
+                }
+            }
+        }
+    }
+    
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+    
+
+    artifacts {
+        archives androidSourcesJar
+    }
+
+}
