@@ -20,24 +20,14 @@ afterEvaluate { project ->
                     pom.version = nexus_version
 
                     def url = ""
-                    if("library".equalsIgnoreCase(nexus_type)){
-                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobileLib-Release/"
-                    }else if("business".equalsIgnoreCase(nexus_type)){
-                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobile-Release/"
-                    }
                     repository(url: url) {
                         authentication(userName: System.getenv("maven_username"), password: System.getenv("maven_password"))
                     }
                 } else {
                     def url = ""
-                    if("library".equalsIgnoreCase(nexus_type)){
-                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobileLib-Snapshot/"
-                    }else if("business".equalsIgnoreCase(nexus_type)){
-                        url = "http://maven.hellobike.cn/nexus/content/repositories/HellobikeMobile-Snapshot/"
-                    }
                     pom.version = nexus_version + '-SNAPSHOT'
                     snapshotRepository(url: url) {
-                        authentication(userName: HB_USERNAME_SNAPSHOT, password: HB_PASSWORD_SNAPSHOT)
+                        authentication(userName: System.getenv("maven_username"), password: System.getenv("maven_password"))
                     }
                 }
             }
