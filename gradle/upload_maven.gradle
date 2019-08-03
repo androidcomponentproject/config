@@ -3,7 +3,7 @@ apply plugin: 'maven-publish'
 
 Properties config = new Properties()
 config.load(project.file("nexus.properties").newDataInputStream())
-def nexus_versionName = config.getProperty('nexus_version')
+def nexus_version = config.getProperty('nexus_version')
 def nexus_artifactId = config.getProperty('nexus_artifactId')
 def nexus_groupId = config.getProperty('nexus_groupId')
 
