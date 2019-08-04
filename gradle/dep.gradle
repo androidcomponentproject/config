@@ -17,7 +17,7 @@ ext {
             arouter_auto_register: "com.alibaba:arouter-register:1.0.2"
     ]
     dep = [
-            lib_coroutine: "com.lhxia:lib_coroutine:1.0.1",
+            lib_coroutine: "com.lhxia:lib_coroutine:1.0.2",
             anko: "org.jetbrains.anko:anko:$anko_version",
             kotlinx_coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1",
             core_ktx: "androidx.core:core-ktx:1.0.2",
